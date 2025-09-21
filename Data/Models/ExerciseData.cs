@@ -1,4 +1,6 @@
-﻿namespace FitnessTracker.Data.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FitnessTracker.Data.Models;
 
 public class ExerciseData
 {

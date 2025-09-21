@@ -20,19 +20,10 @@
                 @Html.DisplayNameFor(model => model.LogEntryData[0].ExerciseName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LogEntryData[0].ExerciseId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.LogEntryData[0].Sets)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LogEntryData[0].Reps)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LogEntryData[0].Time)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LogEntryData[0].IsTimeBasedExercise)
+                Sub Sets
             </th>
             <th></th>
         </tr>
@@ -47,19 +38,17 @@
                 @Html.DisplayFor(modelItem => item.ExerciseName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ExerciseId)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Sets)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Reps)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsTimeBasedExercise)
+                @if(item.IsTimeBasedExercise)
+                {
+                        @($"{item.Time} minutes");
+                    }
+                else
+                {
+                        @($"{item.Reps} reps");
+                    }
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
