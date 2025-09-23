@@ -24,6 +24,25 @@ namespace FitnessTracker.Pages
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            if(LogEntryData.IsTimeBasedExercise)
+            {
+                if(LogEntryData.Time == null || LogEntryData.Time <= 0)
+                {
+                    ModelState.AddModelError("LogEntryData.Time", "Time cannot be empty and must be greater than 0.");
+                }
+
+                LogEntryData.Reps = null;
+            }
+            else
+            {
+                if (LogEntryData.Reps == null || LogEntryData.Reps <= 0)
+                {
+                    ModelState.AddModelError("LogEntryData.Reps", "Reps cannot be empty and must be greater than 0.");
+                }
+
+                LogEntryData.Time = null;
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

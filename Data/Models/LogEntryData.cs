@@ -18,10 +18,12 @@ public class LogEntryData
     public int Sets { get; set; }
 
     [Range(0, int.MaxValue)]
-    public int Reps { get; set; }
+    public int? Reps { get; set; }
 
     [Range(0, float.MaxValue)]
-    public float Time {  get; set; }
+    [Display(Name = "Time (in Minutes)")]
+    public float? Time {  get; set; }
 
+    [Display(Name = "Is This A Time-Based Exercise?")]
     public bool IsTimeBasedExercise { get; set; } = false;
 }
