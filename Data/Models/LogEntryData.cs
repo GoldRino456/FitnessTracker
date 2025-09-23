@@ -23,5 +23,5 @@ public class LogEntryData
     [Range(0, float.MaxValue)]
     public float Time {  get; set; }
 
-    public bool IsTimeBasedExercise { get; set; }
+    public bool IsTimeBasedExercise { get; set; } = false;
 }

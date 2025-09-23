@@ -33,19 +33,19 @@
                 <input asp-for="LogEntryData.Sets" class="form-control" />
                 <span asp-validation-for="LogEntryData.Sets" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="LogEntryData.Reps" class="control-label"></label>
-                <input asp-for="LogEntryData.Reps" class="form-control" />
-                <span asp-validation-for="LogEntryData.Reps" class="text-danger"></span>
-            </div>
-            <div class="form-group">
+            <div class="form-group" id="timeFieldContainer" style="display: none">
                 <label asp-for="LogEntryData.Time" class="control-label"></label>
-                <input asp-for="LogEntryData.Time" class="form-control" />
+                <input asp-for="LogEntryData.Time" class="form-control" id="timeField"/>
                 <span asp-validation-for="LogEntryData.Time" class="text-danger"></span>
+            </div>
+            <div class="form-group" id="repsFieldContainer">
+                <label asp-for="LogEntryData.Reps" class="control-label"></label>
+                <input asp-for="LogEntryData.Reps" class="form-control" id="repsField"/>
+                <span asp-validation-for="LogEntryData.Reps" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="LogEntryData.IsTimeBasedExercise" /> @Html.DisplayNameFor(model => model.LogEntryData.IsTimeBasedExercise)
+                    <input class="form-check-input" asp-for="LogEntryData.IsTimeBasedExercise" onchange="timeToggleChanged(this.checked)"/> @Html.DisplayNameFor(model => model.LogEntryData.IsTimeBasedExercise)
                 </label>
             </div>
             <div class="form-group">
@@ -61,4 +61,24 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        function timeToggleChanged(isChecked)
+        {
+            if(isChecked)
+            {
+                document.getElementById("timeFieldContainer").style.display = "block";
+                document.getElementById("repsFieldContainer").style.display = "none";
+                document.getElementById("repsField").value = '0';
+                document.getElementById("timeField").value = '';
+            }
+            else
+            {
+                document.getElementById("repsFieldContainer").style.display = "block";
+                document.getElementById("timeFieldContainer").style.display = "none";
+                document.getElementById("timeField").value = '0';
+                document.getElementById("repsField").value = '';
+            }
+        }
+    </script>
 }
