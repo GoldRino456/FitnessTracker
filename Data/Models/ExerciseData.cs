@@ -4,12 +4,34 @@ namespace FitnessTracker.Data.Models;
 
 public class ExerciseData
 {
-    public string ExerciseId { get; set; }
-    public string Name { get; set; }
-    public string GifUrl { get; set; }
-    public List<string> TargetMuscles { get; set; }
-    public List<string> BodyParts { get; set; }
-    public List<string> Equipments { get; set; }
-    public List<string> SecondaryMuscles { get; set; }
-    public List<string> Instructions { get; set; }
+    public string exerciseId { get; set; }
+    public string name { get; set; }
+    public string gifUrl { get; set; }
+    public List<string> targetMuscles { get; set; }
+    public List<string> bodyParts { get; set; }
+    public List<string> equipments { get; set; }
+    public List<string> secondaryMuscles { get; set; }
+    public List<string> instructions { get; set; }
+}
+
+public class Metadata
+{
+    public int totalExercises { get; set; }
+    public int totalPages { get; set; }
+    public int currentPage { get; set; }
+    public string previousPage { get; set; }
+    public string nextPage { get; set; }
+}
+
+public class multiExerciseJsonResponse
+{
+    public bool success { get; set; }
+    public Metadata metadata { get; set; }
+    public List<ExerciseData> data {  get; set; }
+}
+
+public class singleExerciseJsonResponse
+{
+    public bool success { get; set; }
+    public ExerciseData data { get; set; }
 }
