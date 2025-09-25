@@ -60,13 +60,12 @@ body {
 }
 
 .btn-primary {
-    background-color: white;
+    background-color: #5c5c5c;
     border: none;
-    color: #15446c;
 }
 
 .btn-success {
-    background-color: #15446c;
+    background-color: #5c5c5c;
     border: none;
 }
 
