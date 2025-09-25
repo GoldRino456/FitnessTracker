@@ -24,7 +24,12 @@ public class CreateModel : PageModel
 
     public async Task<IActionResult> OnPostAsync()
     {
-        if(LogEntryData.IsTimeBasedExercise)
+        if (await ExerciseApiService.GetExerciseById(LogEntryData.ExerciseId) == null)
+        {
+            ModelState.AddModelError("LogEntryData.ExerciseName", "Please choose an exercise from the dropdown list.");
+        }
+
+        if (LogEntryData.IsTimeBasedExercise)
         {
             if(LogEntryData.Time == null || LogEntryData.Time <= 0)
             {

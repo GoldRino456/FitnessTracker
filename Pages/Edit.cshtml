@@ -7,7 +7,6 @@
 
 <h1>Edit</h1>
 
-<h4>LogEntryData</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -65,6 +64,11 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
+                function clearExerciseId()
+                {
+                    document.getElementById("exerciseId").value = "";
+                }
+
                 function timeToggleChanged(isChecked)
                 {
                     if(isChecked)
@@ -89,6 +93,7 @@
         document.getElementById("exerciseSearch").addEventListener("input", function(e) {
             clearTimeout(timer);
             const query = e.target.value;
+            clearExerciseId();
 
             if(query.length < 2) return;
 

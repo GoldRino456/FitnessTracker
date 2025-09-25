@@ -1,103 +1,101 @@
-﻿using FitnessTracker.Data;
-using FitnessTracker.Data.Models;
+﻿using FitnessTracker.Data.Models;
 using FitnessTracker.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace FitnessTracker.Pages
+namespace FitnessTracker.Pages;
+
+public class EditModel : PageModel
 {
-    public class EditModel : PageModel
-    {
-        private readonly FitnessTracker.Data.ExerciseLogDbContext _context;
+    private readonly Data.ExerciseLogDbContext _context;
 
-        public EditModel(FitnessTracker.Data.ExerciseLogDbContext context)
+    public EditModel(Data.ExerciseLogDbContext context)
+    {
+        _context = context;
+    }
+
+    [BindProperty]
+    public LogEntryData LogEntryData { get; set; } = default!;
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
+            return NotFound();
         }
 
-        [BindProperty]
-        public LogEntryData LogEntryData { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
+        var logentrydata =  await _context.ExcerciseLogEntries.FirstOrDefaultAsync(m => m.Id == id);
+        if (logentrydata == null)
         {
-            if (id == null)
+            return NotFound();
+        }
+        LogEntryData = logentrydata;
+        return Page();
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://aka.ms/RazorPagesCRUD.
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if(await ExerciseApiService.GetExerciseById(LogEntryData.ExerciseId) == null)
+        {
+            ModelState.AddModelError("LogEntryData.ExerciseName", "Please choose an exercise from the dropdown list.");
+        }
+
+        if (LogEntryData.IsTimeBasedExercise)
+        {
+            if (LogEntryData.Time == null || LogEntryData.Time <= 0)
             {
-                return NotFound();
+                ModelState.AddModelError("LogEntryData.Time", "Time cannot be empty and must be greater than 0.");
             }
 
-            var logentrydata =  await _context.ExcerciseLogEntries.FirstOrDefaultAsync(m => m.Id == id);
-            if (logentrydata == null)
+            LogEntryData.Reps = null;
+        }
+        else
+        {
+            if (LogEntryData.Reps == null || LogEntryData.Reps <= 0)
             {
-                return NotFound();
+                ModelState.AddModelError("LogEntryData.Reps", "Reps cannot be empty and must be greater than 0.");
             }
-            LogEntryData = logentrydata;
+
+            LogEntryData.Time = null;
+        }
+
+        if (!ModelState.IsValid)
+        {
             return Page();
         }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if (LogEntryData.IsTimeBasedExercise)
-            {
-                if (LogEntryData.Time == null || LogEntryData.Time <= 0)
-                {
-                    ModelState.AddModelError("LogEntryData.Time", "Time cannot be empty and must be greater than 0.");
-                }
+        _context.Attach(LogEntryData).State = EntityState.Modified;
 
-                LogEntryData.Reps = null;
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!LogEntryDataExists(LogEntryData.Id))
+            {
+                return NotFound();
             }
             else
             {
-                if (LogEntryData.Reps == null || LogEntryData.Reps <= 0)
-                {
-                    ModelState.AddModelError("LogEntryData.Reps", "Reps cannot be empty and must be greater than 0.");
-                }
-
-                LogEntryData.Time = null;
+                throw;
             }
-
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.Attach(LogEntryData).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LogEntryDataExists(LogEntryData.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return RedirectToPage("./Index");
         }
 
-        public async Task<JsonResult> OnGetSearchAsync(string query)
-        {
-            var results = await ExerciseApiService.GetFuzzySearchResults(query);
-            return new JsonResult(results);
-        }
+        return RedirectToPage("./Index");
+    }
 
-        private bool LogEntryDataExists(int id)
-        {
-            return _context.ExcerciseLogEntries.Any(e => e.Id == id);
-        }
+    public async Task<JsonResult> OnGetSearchAsync(string query)
+    {
+        var results = await ExerciseApiService.GetFuzzySearchResults(query);
+        return new JsonResult(results);
+    }
+
+    private bool LogEntryDataExists(int id)
+    {
+        return _context.ExcerciseLogEntries.Any(e => e.Id == id);
     }
 }

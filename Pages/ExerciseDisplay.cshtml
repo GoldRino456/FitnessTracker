@@ -6,10 +6,7 @@
 
 <h1>@ViewData["Title"]</h1>
 
-<h1>Details</h1>
-
 <div>
-    <h4>LogEntryData</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -22,13 +19,19 @@
             @Html.DisplayNameFor(model => model.ExerciseData.targetMuscles)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ExerciseData.targetMuscles)
+            @foreach (var line in Model.ExerciseData.targetMuscles)
+            {
+                <p>@line</p>
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ExerciseData.bodyParts)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ExerciseData.bodyParts)
+            @foreach (var line in Model.ExerciseData.bodyParts)
+            {
+                <p>@line</p>
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ExerciseData.equipments)
@@ -40,13 +43,25 @@
             @Html.DisplayNameFor(model => model.ExerciseData.secondaryMuscles)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ExerciseData.secondaryMuscles)
+            @foreach(var line in Model.ExerciseData.secondaryMuscles)
+            {
+                <p>@line</p>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ExerciseData.gifUrl)
+        </dt>
+        <dd class="col-sm-10">
+            <img src="@Model.ExerciseData.gifUrl"/>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.ExerciseData.instructions)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ExerciseData.instructions)
+            @foreach (var line in Model.ExerciseData.instructions)
+            {
+                <p>@line</p>
+            }
         </dd>
     </dl>
 </div>
