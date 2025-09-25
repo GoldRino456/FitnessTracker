@@ -1,43 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using FitnessTracker.Data;
 using FitnessTracker.Data.Models;
 
-namespace FitnessTracker.Pages
+namespace FitnessTracker.Pages;
+
+public class DetailsModel : PageModel
 {
-    public class DetailsModel : PageModel
+    private readonly ExerciseLogDbContext _context;
+
+    public DetailsModel(ExerciseLogDbContext context)
     {
-        private readonly FitnessTracker.Data.ExerciseLogDbContext _context;
+        _context = context;
+    }
 
-        public DetailsModel(FitnessTracker.Data.ExerciseLogDbContext context)
+    public LogEntryData LogEntryData { get; set; } = default!;
+
+    public async Task<IActionResult> OnGetAsync(int? id)
+    {
+        if (id == null)
         {
-            _context = context;
-        }
-
-        public LogEntryData LogEntryData { get; set; } = default!;
-
-        public async Task<IActionResult> OnGetAsync(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var logentrydata = await _context.ExcerciseLogEntries.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (logentrydata is not null)
-            {
-                LogEntryData = logentrydata;
-
-                return Page();
-            }
-
             return NotFound();
         }
+
+        var logentrydata = await _context.ExcerciseLogEntries.FirstOrDefaultAsync(m => m.Id == id);
+
+        if (logentrydata is not null)
+        {
+            LogEntryData = logentrydata;
+
+            return Page();
+        }
+
+        return NotFound();
     }
 }

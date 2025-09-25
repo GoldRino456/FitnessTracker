@@ -5,10 +5,10 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<form id="searchBar" method="post">
+<form method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
-            <input type="search" asp-for="SearchQuery" />
+            <input type="search" asp-for="SearchQuery" id="searchBar" value="@Model.SearchQuery"/>
             <input type="submit" value="Submit" class="btn btn-primary" />
             <span asp-validation-for="SearchQuery" class="text-danger"></span>
         </div>
@@ -43,7 +43,7 @@
                         @Html.DisplayFor(modelItem => item.equipments)
                     </td>
                     <td>
-                        <a asp-page="./ExerciseDisplay" asp-route-id="@item.exerciseId">Details</a>
+                        <a asp-page="./ExerciseDisplay" asp-route-id="@item.exerciseId" asp-route-query="@Model.SearchQuery">Details</a>
                     </td>
                 </tr>
             }
