@@ -51,5 +51,10 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./ExerciseSearch" asp-route-query="@Model.SearchQuery">Back To Search Results</a>
+    @if (!String.IsNullOrWhiteSpace(Model.SearchQuery))
+    {
+        <a asp-page="./ExerciseSearch" asp-route-query="@Model.SearchQuery">Back To Search Results</a>
+    }
+
+    <a asp-page="./Index">Back to List</a>
 </div>

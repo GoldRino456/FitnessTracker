@@ -20,12 +20,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="LogEntryData.ExerciseName" class="control-label"></label>
-                <input asp-for="LogEntryData.ExerciseName" class="form-control" />
+                <input id="exerciseSearch" type="text" asp-for="LogEntryData.ExerciseName" class="form-control" placeholder="Search exercises..." autocomplete="off"/>
+                <div id="searchResults" class="dropdown"></div>
                 <span asp-validation-for="LogEntryData.ExerciseName" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group" hidden>
                 <label asp-for="LogEntryData.ExerciseId" class="control-label"></label>
-                <input asp-for="LogEntryData.ExerciseId" class="form-control" />
+                <input id="exerciseId" asp-for="LogEntryData.ExerciseId" class="form-control"/>
                 <span asp-validation-for="LogEntryData.ExerciseId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -81,5 +82,38 @@
             var isChecked = document.getElementById("timeToggle").checked;
             timeToggleChanged(isChecked);
         });
+
+        let timer;
+
+        document.getElementById("exerciseSearch").addEventListener("input", function(e) {
+            clearTimeout(timer);
+            const query = e.target.value;
+
+            if(query.length < 2) return;
+
+            timer = setTimeout(() => {
+                fetch(`?handler=Search&query=${encodeURIComponent(query)}`)
+                .then(res => res.json())
+                .then(data => {
+                    let resultsDiv = document.getElementById("searchResults");
+                    resultsDiv.innerHTML = "";
+
+                    data.forEach(item => {
+                        let option = document.createElement("div");
+                        option.textContent = item.name;
+                        option.classList.add("dropdown-item");
+
+                        option.addEventListener("click", () => {
+                            document.getElementById("exerciseSearch").value = item.name;
+                            document.getElementById("exerciseId").value = item.exerciseId;
+                            resultsDiv.innerHTML = "";
+                        });
+
+                        resultsDiv.appendChild(option);
+                    });
+                });
+            }, 300);
+        });
+
     </script>
 }

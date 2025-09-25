@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Data.Models;
+using FitnessTracker.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using FitnessTracker.Data;
-using FitnessTracker.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FitnessTracker.Pages
 {
@@ -86,6 +87,12 @@ namespace FitnessTracker.Pages
             }
 
             return RedirectToPage("./Index");
+        }
+
+        public async Task<JsonResult> OnGetSearchAsync(string query)
+        {
+            var results = await ExerciseApiService.GetFuzzySearchResults(query);
+            return new JsonResult(results);
         }
 
         private bool LogEntryDataExists(int id)

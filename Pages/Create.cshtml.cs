@@ -1,57 +1,62 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using FitnessTracker.Data.Models;
+using FitnessTracker.Services;
 
-namespace FitnessTracker.Pages
+namespace FitnessTracker.Pages;
+
+public class CreateModel : PageModel
 {
-    public class CreateModel : PageModel
-    {
-        private readonly FitnessTracker.Data.ExerciseLogDbContext _context;
+    private readonly FitnessTracker.Data.ExerciseLogDbContext _context;
 
-        public CreateModel(FitnessTracker.Data.ExerciseLogDbContext context)
+    [BindProperty]
+    public LogEntryData LogEntryData { get; set; } = default!;
+
+    public CreateModel(FitnessTracker.Data.ExerciseLogDbContext context)
+    {
+        _context = context;
+    }
+
+    public IActionResult OnGet()
+    {
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostAsync()
+    {
+        if(LogEntryData.IsTimeBasedExercise)
         {
-            _context = context;
+            if(LogEntryData.Time == null || LogEntryData.Time <= 0)
+            {
+                ModelState.AddModelError("LogEntryData.Time", "Time cannot be empty and must be greater than 0.");
+            }
+
+            LogEntryData.Reps = null;
+        }
+        else
+        {
+            if (LogEntryData.Reps == null || LogEntryData.Reps <= 0)
+            {
+                ModelState.AddModelError("LogEntryData.Reps", "Reps cannot be empty and must be greater than 0.");
+            }
+
+            LogEntryData.Time = null;
         }
 
-        public IActionResult OnGet()
+        if (!ModelState.IsValid)
         {
             return Page();
         }
 
-        [BindProperty]
-        public LogEntryData LogEntryData { get; set; } = default!;
+        _context.ExcerciseLogEntries.Add(LogEntryData);
+        await _context.SaveChangesAsync();
 
-        // For more information, see https://aka.ms/RazorPagesCRUD.
-        public async Task<IActionResult> OnPostAsync()
-        {
-            if(LogEntryData.IsTimeBasedExercise)
-            {
-                if(LogEntryData.Time == null || LogEntryData.Time <= 0)
-                {
-                    ModelState.AddModelError("LogEntryData.Time", "Time cannot be empty and must be greater than 0.");
-                }
+        return RedirectToPage("./Index");
+    }
 
-                LogEntryData.Reps = null;
-            }
-            else
-            {
-                if (LogEntryData.Reps == null || LogEntryData.Reps <= 0)
-                {
-                    ModelState.AddModelError("LogEntryData.Reps", "Reps cannot be empty and must be greater than 0.");
-                }
-
-                LogEntryData.Time = null;
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
-
-            _context.ExcerciseLogEntries.Add(LogEntryData);
-            await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
-        }
+    public async Task<JsonResult> OnGetSearchAsync(string query)
+    {
+        var results = await ExerciseApiService.GetFuzzySearchResults(query);
+        return new JsonResult(results);
     }
 }
