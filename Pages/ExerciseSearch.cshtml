@@ -34,16 +34,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.name)
+                        <a asp-page="./ExerciseDisplay" asp-route-id="@item.exerciseId" asp-route-query="@Model.SearchQuery">@Html.DisplayFor(modelItem => item.name)</a> 
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.targetMuscles)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.equipments)
-                    </td>
-                    <td>
-                        <a asp-page="./ExerciseDisplay" asp-route-id="@item.exerciseId" asp-route-query="@Model.SearchQuery">Details</a>
                     </td>
                 </tr>
             }

@@ -25,7 +25,7 @@ public class EditModel : PageModel
             return NotFound();
         }
 
-        var logentrydata =  await _context.ExcerciseLogEntries.FirstOrDefaultAsync(m => m.Id == id);
+        var logentrydata = await _context.ExcerciseLogEntries.FirstOrDefaultAsync(m => m.Id == id);
         if (logentrydata == null)
         {
             return NotFound();
@@ -38,7 +38,7 @@ public class EditModel : PageModel
     // For more information, see https://aka.ms/RazorPagesCRUD.
     public async Task<IActionResult> OnPostAsync()
     {
-        if(await ExerciseApiService.GetExerciseById(LogEntryData.ExerciseId) == null)
+        if (await ExerciseApiService.GetExerciseById(LogEntryData.ExerciseId) == null)
         {
             ModelState.AddModelError("LogEntryData.ExerciseName", "Please choose an exercise from the dropdown list.");
         }

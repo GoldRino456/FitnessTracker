@@ -24,7 +24,7 @@ public class ExerciseSearchModel : PageModel
 
     public async Task<IActionResult> OnGetAsync(string? query)
     {
-        if(query == null)
+        if (query == null)
         {
             SearchResults ??= [];
         }
@@ -52,7 +52,7 @@ public class ExerciseSearchModel : PageModel
     {
         var results = await ExerciseApiService.GetFuzzySearchResults(query);
 
-        if(results != null && results.Count > 0)
+        if (results != null && results.Count > 0)
         {
             SearchResults = results;
             return true;

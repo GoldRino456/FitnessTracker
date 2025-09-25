@@ -1,18 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using FitnessTracker.Data.Models;
+﻿using FitnessTracker.Data.Models;
 using FitnessTracker.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FitnessTracker.Pages;
 
 public class CreateModel : PageModel
 {
-    private readonly FitnessTracker.Data.ExerciseLogDbContext _context;
+    private readonly Data.ExerciseLogDbContext _context;
 
     [BindProperty]
     public LogEntryData LogEntryData { get; set; } = default!;
 
-    public CreateModel(FitnessTracker.Data.ExerciseLogDbContext context)
+    public CreateModel(Data.ExerciseLogDbContext context)
     {
         _context = context;
     }
@@ -31,7 +31,7 @@ public class CreateModel : PageModel
 
         if (LogEntryData.IsTimeBasedExercise)
         {
-            if(LogEntryData.Time == null || LogEntryData.Time <= 0)
+            if (LogEntryData.Time == null || LogEntryData.Time <= 0)
             {
                 ModelState.AddModelError("LogEntryData.Time", "Time cannot be empty and must be greater than 0.");
             }

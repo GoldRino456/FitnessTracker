@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FitnessTracker.Data;
+using FitnessTracker.Data.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using FitnessTracker.Data;
-using FitnessTracker.Data.Models;
 
 namespace FitnessTracker.Pages;
 

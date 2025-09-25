@@ -17,7 +17,7 @@ public class ExerciseDisplayModel : PageModel
             return NotFound();
         }
 
-        if(query != null)
+        if (query != null)
         {
             SearchQuery = query;
         }
